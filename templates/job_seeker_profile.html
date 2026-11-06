@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | Smart Job Portal</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        /* NAVIGATION */
+
+        nav {
+            background: #1f2937;
+            padding: 16px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            color: white;
+            margin: 0;
+            font-size: 21px;
+        }
+
+        nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #93c5fd;
+        }
+
+        /* PAGE LAYOUT */
+
+        .container {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            margin-bottom: 25px;
+        }
+
+        .welcome-section h1 {
+            margin: 0 0 8px;
+            font-size: 27px;
+        }
+
+        .welcome-section p {
+            color: #666;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        /* PROFILE SIDEBAR */
+
+        .profile-sidebar {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-avatar {
+            width: 75px;
+            height: 75px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .profile-sidebar h3 {
+            margin: 0 0 6px;
+        }
+
+        .profile-sidebar .email {
+            font-size: 13px;
+            color: #777;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-sidebar .role {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 11px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .sidebar-divider {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 22px 0;
+        }
+
+        .sidebar-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-links a {
+            color: #444;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 9px;
+            border-radius: 5px;
+        }
+
+        .sidebar-links a:hover,
+        .sidebar-links a.active {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        /* PROFILE CONTENT */
+
+        .profile-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-heading {
+            margin-bottom: 22px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 7px;
+            font-size: 21px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: #777;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-section {
+            margin-top: 30px;
+        }
+
+        .form-section h3 {
+            font-size: 17px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            background: white;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .help-text {
+            color: #888;
+            font-size: 12px;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        /* RESUME MANAGEMENT */
+
+        .resume-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 7px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .resume-card h4 {
+            margin: 0 0 10px;
+            font-size: 15px;
+        }
+
+        .resume-card p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin: 7px 0;
+        }
+
+        .resume-filename {
+            color: #1d4ed8;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .status.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .resume-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .upload-button,
+        .download-button,
+        .autofill-button {
+            display: inline-block;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .upload-button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .upload-button:hover {
+            background: #1d4ed8;
+        }
+
+        .download-button {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .download-button:hover {
+            background: #d1d5db;
+        }
+
+        .autofill-button {
+            background: #059669;
+            color: white;
+        }
+
+        .autofill-button:hover {
+            background: #047857;
+        }
+
+        .resume-upload-form {
+            margin-top: 15px;
+        }
+
+        .resume-upload-form input[type="file"] {
+            background: white;
+            margin-bottom: 12px;
+        }
+
+        /* BUTTONS */
+
+        .form-actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .save-button {
+            background: #2563eb;
+            color: white;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel-button {
+            background: #e5e7eb;
+            color: #333;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* FLASH MESSAGES */
+
+        .flash {
+            padding: 13px 15px;
+            margin-bottom: 18px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .flash.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .flash.error,
+        .flash.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .flash.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .flash.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* RESPONSIVE DESIGN */
+
+        @media (max-width: 800px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .profile-avatar {
+                margin: 0;
+                flex-shrink: 0;
+            }
+
+            .sidebar-divider,
+            .sidebar-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+            .profile-content {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .save-button,
+            .cancel-button {
+                text-align: center;
+                width: 100%;
+            }
+
+            .resume-actions {
+                flex-direction: column;
+            }
+
+            .resume-actions a,
+            .resume-actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav>
+    <h2>Smart Job Portal</h2>
+
+    <div class="nav-links">
+        <a href="{{ url_for('job_seeker.profile') }}">My Profile</a>
+        <a href="{{ url_for('job_seeker.jobs') }}">Browse Jobs</a>
+        <a href="{{ url_for('job_seeker.my_applications') }}">My Applications</a>
+        <a href="{{ url_for('authentication.logout') }}">Logout</a>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+
+<div class="container">
+
+    <div class="welcome-section">
+        <h1>
+            Welcome, {{ current_user.first_name }}!
+        </h1>
+
+        <p>
+            Manage your professional profile and keep your information
+            up to date to help employers understand your experience,
+            qualifications and skills.
+        </p>
+    </div>
+
+    <div class="profile-layout">
+
+        <!-- PROFILE SIDEBAR -->
+
+        <aside class="profile-sidebar">
+
+            <div>
+                <div class="profile-avatar">
+                    {{ current_user.first_name[0]|upper }}
+                </div>
+
+                <h3>
+                    {{ current_user.first_name }}
+                    {{ current_user.last_name }}
+                </h3>
+
+                <p class="email">
+                    {{ current_user.email }}
+                </p>
+
+                <span class="role">
+                        Job Seeker
+                    </span>
+            </div>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-links">
+                <a
+                        href="{{ url_for('job_seeker.profile') }}"
+                        class="active"
+                >
+                    My Profile
+                </a>
+
+                <a href="{{ url_for('job_seeker.jobs') }}">
+                    Browse Jobs
+                </a>
+
+                <a href="{{ url_for('job_seeker.my_applications') }}">
+                    My Applications
+                </a>
+
+                <a href="{{ url_for('authentication.logout') }}">
+                    Logout
+                </a>
+
+                <a href="{{ url_for('job_seeker.recommended_jobs') }}">
+                    Recommended Jobs
+                </a>
+            </div>
+
+        </aside>
+
+        <!-- PROFILE CONTENT -->
+
+        <main class="profile-content">
+
+            <div class="section-heading">
+                <h2>Professional Profile</h2>
+
+                <p>
+                    Provide your personal and professional information.
+                    You can also upload your CV and use AI to extract
+                    information to help complete your profile.
+                </p>
+            </div>
+
+            <!-- FLASH MESSAGES -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <!-- RESUME MANAGEMENT -->
+
+            <div class="form-section">
+
+                <h3>Resume Management</h3>
+
+                <div class="resume-card">
+
+                    {% if job_seeker_profile.resume_filename %}
+
+                    <h4>Current Resume</h4>
+
+                    <p>
+                        Uploaded file:
+                        <span class="resume-filename">
+                                    {{ job_seeker_profile.resume_filename }}
+                                </span>
+                    </p>
+
+                    {% if job_seeker_profile.resume_parse_status == "completed" %}
+
+                    <span class="status completed">
+                                    AI Parsing Completed
+                                </span>
+
+                    <p>
+                        Your resume has been processed successfully.
+                        You can use the extracted information to
+                        populate your profile without uploading
+                        or parsing the resume again.
+                    </p>
+
+                    {% elif job_seeker_profile.resume_parse_status == "pending" %}
+
+                    <span class="status pending">
+                                    Processing
+                                </span>
+
+                    <p>
+                        Your resume has been uploaded and is
+                        awaiting processing.
+                    </p>
+
+                    {% elif job_seeker_profile.resume_parse_status == "failed" %}
+
+                    <span class="status failed">
+                                    Parsing Failed
+                                </span>
+
+                    <p>
+                        Your resume is uploaded, but its contents
+                        could not be processed. Please try uploading
+                        the document again.
+                    </p>
+
+                    {% else %}
+
+                    <p>
+                        No parsing status is currently available.
+                    </p>
+
+                    {% endif %}
+
+                    <div class="resume-actions">
+
+                        <a
+                                href="{{ url_for('job_seeker.download_resume') }}"
+                                class="download-button"
+                        >
+                            Download Current Resume
+                        </a>
+
+                        {% if job_seeker_profile.resume_parse_status == "completed"
+                        and job_seeker_profile.parsed_resume_json %}
+
+                        <form
+                                method="POST"
+                                action="{{ url_for('job_seeker.use_resume_for_profile') }}"
+                        >
+                            <button
+                                    type="submit"
+                                    class="autofill-button"
+                                    onclick="return confirm('Use the information extracted from your resume to populate your profile? Existing profile fields will be replaced where extracted information is available.');"
+                            >
+                                Populate Profile Using Resume
+                            </button>
+                        </form>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% else %}
+
+                    <h4>No Resume Uploaded</h4>
+
+                    <p>
+                        Upload your CV to allow the AI resume parser
+                        to extract your qualifications, work experience,
+                        skills and other relevant information.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="resume-card">
+
+                    <h4>
+                        {% if job_seeker_profile.resume_filename %}
+                        Replace Your Resume
+                        {% else %}
+                        Upload Your Resume
+                        {% endif %}
+                    </h4>
+
+                    <p>
+                        Accepted formats: PDF and DOCX. Maximum file size: 5 MB.
+                        Uploading a replacement will overwrite your current
+                        resume and its previously extracted information.
+                    </p>
+
+                    <form
+                            method="POST"
+                            action="{{ url_for('job_seeker.upload_resume') }}"
+                            enctype="multipart/form-data"
+                            class="resume-upload-form"
+                    >
+
+                        <div class="form-group">
+
+                            <label for="resume">
+                                Select Resume
+                            </label>
+
+                            <input
+                                    type="file"
+                                    id="resume"
+                                    name="resume"
+                                    accept=".pdf,.docx"
+                                    required
+                            >
+
+                        </div>
+
+                        <button
+                                type="submit"
+                                class="upload-button"
+                                onclick="return confirm('Upload this resume? It will replace your currently stored resume, if one exists.');"
+                        >
+                            {% if job_seeker_profile.resume_filename %}
+                            Replace Resume and Parse
+                            {% else %}
+                            Upload and Parse Resume
+                            {% endif %}
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <!-- PROFILE FORM -->
+
+            <form method="POST">
+
+                <!-- PERSONAL INFORMATION -->
+
+                <div class="form-section">
+
+                    <h3>Personal Information</h3>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="phone">
+                                Phone Number
+                            </label>
+
+                            <input
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    value="{{ job_seeker_profile.phone if job_seeker_profile else '' }}"
+                                    placeholder="Enter your phone number"
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="location">
+                                Location
+                            </label>
+
+                            <input
+                                    type="text"
+                                    id="location"
+                                    name="location"
+                                    value="{{ job_seeker_profile.location if job_seeker_profile else '' }}"
+                                    placeholder="e.g. Chester, United Kingdom"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- EDUCATION -->
+
+                <div class="form-section">
+
+                    <h3>Education and Qualifications</h3>
+
+                    <div class="form-group">
+
+                        <label for="education">
+                            Education
+                        </label>
+
+                        <textarea
+                                id="education"
+                                name="education"
+                                placeholder="Enter your qualifications, university, degree and graduation year..."
+                        >{{ job_seeker_profile.education if job_seeker_profile else '' }}</textarea>
+
+                        <p class="help-text">
+                            Include your degree, institution, subject and relevant qualifications.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- EXPERIENCE -->
+
+                <div class="form-section">
+
+                    <h3>Professional Experience</h3>
+
+                    <div class="form-group">
+
+                        <label for="experience">
+                            Work Experience
+                        </label>
+
+                        <textarea
+                                id="experience"
+                                name="experience"
+                                placeholder="Describe your previous employment, internships, projects and responsibilities..."
+                        >{{ job_seeker_profile.experience if job_seeker_profile else '' }}</textarea>
+
+                        <p class="help-text">
+                            Include relevant work experience, internships, projects and responsibilities.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- SKILLS -->
+
+                <div class="form-section">
+
+                    <h3>Technical and Professional Skills</h3>
+
+                    <div class="form-group">
+
+                        <label for="skills">
+                            Skills
+                        </label>
+
+                        <textarea
+                                id="skills"
+                                name="skills"
+                                placeholder="Python, Flask, SQL, Machine Learning, Data Analysis, Git..."
+                        >{{ job_seeker_profile.skills if job_seeker_profile else '' }}</textarea>
+
+                        <p class="help-text">
+                            Separate individual skills using commas.
+                            For example: Python, Flask, SQL, Machine Learning.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- ABOUT ME -->
+
+                <div class="form-section">
+
+                    <h3>About Me</h3>
+
+                    <div class="form-group">
+
+                        <label for="bio">
+                            Professional Summary
+                        </label>
+
+                        <textarea
+                                id="bio"
+                                name="bio"
+                                placeholder="Write a short professional introduction about yourself, your interests and career goals..."
+                        >{{ job_seeker_profile.bio if job_seeker_profile else '' }}</textarea>
+
+                    </div>
+
+                </div>
+
+                <!-- FORM ACTIONS -->
+
+                <div class="form-actions">
+
+                    <button
+                            type="submit"
+                            class="save-button"
+                    >
+                        Update Profile
+                    </button>
+
+                    <a
+                            href="{{ url_for('job_seeker.jobs') }}"
+                            class="cancel-button"
+                    >
+                        Browse Jobs
+                    </a>
+
+                </div>
+
+            </form>
+
+        </main>
+
+    </div>
+
+</div>
+
+</body>
+</html>

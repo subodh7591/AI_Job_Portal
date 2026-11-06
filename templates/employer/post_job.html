@@ -1,0 +1,494 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Post a Job | Smart Job Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        nav {
+            background: #1f2937;
+            padding: 16px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            color: white;
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .salary-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button,
+        .cancel-button {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel-button {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .flash {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .flash.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .flash.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .flash.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        @media (max-width: 650px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                margin: 0 7px;
+            }
+
+            .form-card {
+                padding: 20px;
+            }
+
+            .salary-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <h2>Smart Job Portal</h2>
+
+        <div>
+            <a href="{{ url_for('employer.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('employer.company_profile') }}">Company Profile</a>
+            <a href="{{ url_for('authentication.logout') }}">Logout</a>
+        </div>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="form-card">
+
+            <h1>Post a Job</h1>
+
+            <p class="subtitle">
+                Create a new vacancy and provide information for potential candidates.
+            </p>
+
+
+            <!-- Flash Messages -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                        <div class="flash {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <form method="POST">
+
+                <!-- Job Information -->
+
+                <h3 class="section-title">Job Information</h3>
+
+                <div class="form-group">
+
+                    <label for="title">Job Title *</label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="e.g. Python Developer"
+                        required
+                        maxlength="150"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="description">Job Description *</label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Describe the role, responsibilities and main duties..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="location">Job Location</label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="e.g. London, United Kingdom"
+                    >
+
+                </div>
+
+
+                <!-- Employment Information -->
+
+                <h3 class="section-title">Employment Information</h3>
+
+                <div class="form-group">
+
+                    <label for="employment_type">Employment Type</label>
+
+                    <select id="employment_type" name="employment_type">
+
+                        <option value="">Select employment type</option>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Temporary">Temporary</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="workplace_type">Workplace Type</label>
+
+                    <select id="workplace_type" name="workplace_type">
+
+                        <option value="">Select workplace type</option>
+                        <option value="On-site">On-site</option>
+                        <option value="Remote">Remote</option>
+                        <option value="Hybrid">Hybrid</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="experience_level">Experience Level</label>
+
+                    <select id="experience_level" name="experience_level">
+
+                        <option value="">Select experience level</option>
+                        <option value="Entry-level">Entry-level</option>
+                        <option value="Graduate">Graduate</option>
+                        <option value="Mid-level">Mid-level</option>
+                        <option value="Senior-level">Senior-level</option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Salary Information -->
+
+                <h3 class="section-title">Salary Information</h3>
+
+                <div class="salary-row">
+
+                    <div class="form-group">
+
+                        <label for="salary_min">Minimum Salary</label>
+
+                        <input
+                            type="number"
+                            id="salary_min"
+                            name="salary_min"
+                            min="0"
+                            step="0.01"
+                            placeholder="25000"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="salary_max">Maximum Salary</label>
+
+                        <input
+                            type="number"
+                            id="salary_max"
+                            name="salary_max"
+                            min="0"
+                            step="0.01"
+                            placeholder="35000"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="salary_currency">Currency</label>
+
+                        <select id="salary_currency" name="salary_currency">
+
+                            <option value="GBP" selected>GBP (£)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="NPR">NPR (रु)</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Skills and Qualifications -->
+
+                <h3 class="section-title">Skills and Qualifications</h3>
+
+                <div class="form-group">
+
+                    <label for="required_skills">Required Skills</label>
+
+                    <textarea
+                        id="required_skills"
+                        name="required_skills"
+                        placeholder="Python, Flask, SQL, REST API, Git"
+                    ></textarea>
+
+                    <p class="help-text">
+                        Separate skills using commas.
+                    </p>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="preferred_skills">Preferred Skills</label>
+
+                    <textarea
+                        id="preferred_skills"
+                        name="preferred_skills"
+                        placeholder="Docker, AWS, Machine Learning"
+                    ></textarea>
+
+                    <p class="help-text">
+                        Enter additional skills that would be beneficial.
+                    </p>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="qualifications">Qualifications</label>
+
+                    <textarea
+                        id="qualifications"
+                        name="qualifications"
+                        placeholder="e.g. Bachelor's degree in Computer Science or equivalent experience."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- Application Information -->
+
+                <h3 class="section-title">Application Information</h3>
+
+                <div class="form-group">
+
+                    <label for="closing_date">Application Closing Date</label>
+
+                    <input
+                        type="date"
+                        id="closing_date"
+                        name="closing_date"
+                    >
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="button-row">
+
+                    <button type="submit">
+                        Publish Job
+                    </button>
+
+                    <a
+                        href="{{ url_for('employer.dashboard') }}"
+                        class="cancel-button"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

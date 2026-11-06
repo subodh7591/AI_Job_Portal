@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Browse Jobs | Smart Job Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        nav {
+            background: #1f2937;
+            padding: 16px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            color: white;
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #666;
+        }
+
+        .search-card {
+            background: white;
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            background: white;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .filter-group {
+            margin-bottom: 5px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-button,
+        .clear-button {
+            padding: 11px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .clear-button {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .results-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .results-heading h2 {
+            font-size: 20px;
+        }
+
+        .job-card {
+            background: white;
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .job-card h3 {
+            margin: 0 0 10px;
+            color: #1f2937;
+        }
+
+        .company-name {
+            color: #2563eb;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .job-description {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .skills {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .view-button {
+            display: inline-block;
+            padding: 10px 16px;
+            background: #2563eb;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 45px 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .empty-state p {
+            color: #666;
+        }
+
+        @media (max-width: 700px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                margin: 0 7px;
+            }
+
+            .search-row,
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .results-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+
+        <h2>Smart Job Portal</h2>
+
+        <div>
+            <a href="{{ url_for('job_seeker.profile') }}">My Profile</a>
+            <a href="{{ url_for('job_seeker.jobs') }}">Browse Jobs</a>
+            <a href="{{ url_for('authentication.logout') }}">Logout</a>
+        </div>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="page-heading">
+
+            <h1>Find Your Next Opportunity</h1>
+
+            <p>
+                Search for vacancies and discover opportunities that match your skills and career goals.
+            </p>
+
+        </div>
+
+
+        <!-- Search and Filters -->
+
+        <div class="search-card">
+
+            <form
+                method="GET"
+                action="{{ url_for('job_seeker.jobs') }}"
+            >
+
+                <div class="search-row">
+
+                    <div class="filter-group">
+
+                        <label for="search">Job Title, Keywords or Skills</label>
+
+                        <input
+                            type="text"
+                            id="search"
+                            name="search"
+                            value="{{ search_query }}"
+                            placeholder="e.g. Python Developer, Machine Learning"
+                        >
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="location">Location</label>
+
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            value="{{ selected_location }}"
+                            placeholder="e.g. London, Manchester"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="filter-row">
+
+                    <div class="filter-group">
+
+                        <label for="employment_type">Employment Type</label>
+
+                        <select
+                            id="employment_type"
+                            name="employment_type"
+                        >
+
+                            <option value="">All employment types</option>
+
+                            {% for option in [
+                                "Full-time",
+                                "Part-time",
+                                "Contract",
+                                "Internship",
+                                "Temporary"
+                            ] %}
+
+                                <option
+                                    value="{{ option }}"
+                                    {% if selected_employment_type == option %}selected{% endif %}
+                                >
+                                    {{ option }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="workplace_type">Workplace Type</label>
+
+                        <select
+                            id="workplace_type"
+                            name="workplace_type"
+                        >
+
+                            <option value="">All workplace types</option>
+
+                            {% for option in ["On-site", "Remote", "Hybrid"] %}
+
+                                <option
+                                    value="{{ option }}"
+                                    {% if selected_workplace_type == option %}selected{% endif %}
+                                >
+                                    {{ option }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="experience_level">Experience Level</label>
+
+                        <select
+                            id="experience_level"
+                            name="experience_level"
+                        >
+
+                            <option value="">All experience levels</option>
+
+                            {% for option in [
+                                "Entry-level",
+                                "Graduate",
+                                "Mid-level",
+                                "Senior-level"
+                            ] %}
+
+                                <option
+                                    value="{{ option }}"
+                                    {% if selected_experience_level == option %}selected{% endif %}
+                                >
+                                    {{ option }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        class="search-button"
+                    >
+                        Search Jobs
+                    </button>
+
+                    <a
+                        href="{{ url_for('job_seeker.jobs') }}"
+                        class="clear-button"
+                    >
+                        Clear Filters
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- Job Results -->
+
+        <div class="results-heading">
+
+            <h2>Available Vacancies</h2>
+
+            <span>{{ jobs|length }} job(s) found</span>
+
+        </div>
+
+
+        {% if jobs %}
+
+            {% for job in jobs %}
+
+                <div class="job-card">
+
+                    <h3>{{ job.title }}</h3>
+
+                    <div class="company-name">
+
+                        {% if job.employer %}
+                            {{ job.employer.company_name }}
+                        {% else %}
+                            Employer
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="job-meta">
+
+                        <span>
+                            Location: {{ job.location or "Not specified" }}
+                        </span>
+
+                        <span>
+                            Type: {{ job.employment_type or "Not specified" }}
+                        </span>
+
+                        <span>
+                            Workplace: {{ job.workplace_type or "Not specified" }}
+                        </span>
+
+                        <span>
+                            Experience: {{ job.experience_level or "Not specified" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="job-description">
+
+                        {{ job.description[:250] }}
+
+                        {% if job.description|length > 250 %}
+                            ...
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if job.required_skills %}
+
+                        <div class="skills">
+
+                            <strong>Required Skills:</strong>
+
+                            {{ job.required_skills }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <a
+                        href="{{ url_for('job_seeker.job_details', job_id=job.id) }}"
+                        class="view-button"
+                    >
+                        View Job Details
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h3>No Jobs Found</h3>
+
+                <p>
+                    No vacancies match your current search or filter criteria.
+                    Try changing your search terms or clearing the filters.
+                </p>
+
+                <a
+                    href="{{ url_for('job_seeker.jobs') }}"
+                    class="clear-button"
+                >
+                    View All Jobs
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

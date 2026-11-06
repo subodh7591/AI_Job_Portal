@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Company Profile | AI Job Portal</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #334155;
+        }
+
+        .navbar {
+            background: #ffffff;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar h2 {
+            color: #2563eb;
+            font-size: 21px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #475569;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .navbar a:hover {
+            color: #2563eb;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            color: #1e293b;
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 9px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            gap: 12px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .save-button {
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .save-button:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel-button {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .cancel-button:hover {
+            background: #cbd5e1;
+        }
+
+        .flash-message {
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .flash-message.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .flash-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .flash-message.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-container {
+                padding: 22px;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+                align-items: stretch;
+            }
+
+            .button {
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+
+    <nav class="navbar">
+
+        <h2>AI Job Portal</h2>
+
+        <div>
+
+            <a href="{{ url_for('employer.dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('employer.company_profile') }}">
+                Company Profile
+            </a>
+
+            <a href="{{ url_for('authentication.logout') }}">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <h1>Company Profile</h1>
+
+            <p>
+                Add and manage your company information.
+                This information will be displayed alongside your job vacancies.
+            </p>
+
+        </div>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- COMPANY PROFILE FORM -->
+
+        <div class="form-container">
+
+            <form
+                method="POST"
+                action="{{ url_for('employer.company_profile') }}"
+            >
+
+                <!-- COMPANY NAME -->
+
+                <div class="form-group">
+
+                    <label for="company_name">
+                        Company Name <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="company_name"
+                        name="company_name"
+                        class="form-control"
+                        placeholder="Enter company name"
+                        value="{{ employer_profile.company_name if employer_profile else '' }}"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- INDUSTRY AND COMPANY SIZE -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="industry">
+                            Industry
+                        </label>
+
+                        <input
+                            type="text"
+                            id="industry"
+                            name="industry"
+                            class="form-control"
+                            placeholder="e.g. Information Technology"
+                            value="{{ employer_profile.industry or '' if employer_profile else '' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="company_size">
+                            Company Size
+                        </label>
+
+                        <select
+                            id="company_size"
+                            name="company_size"
+                            class="form-control"
+                        >
+
+                            <option value="">
+                                Select company size
+                            </option>
+
+                            {% for size in [
+                                "1-10 employees",
+                                "11-50 employees",
+                                "51-200 employees",
+                                "201-500 employees",
+                                "501-1000 employees",
+                                "1000+ employees"
+                            ] %}
+
+                                <option
+                                    value="{{ size }}"
+                                    {% if employer_profile and employer_profile.company_size == size %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ size }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEBSITE AND LOCATION -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="website">
+                            Company Website
+                        </label>
+
+                        <input
+                            type="url"
+                            id="website"
+                            name="website"
+                            class="form-control"
+                            placeholder="https://www.example.com"
+                            value="{{ employer_profile.website or '' if employer_profile else '' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="location">
+                            Company Location
+                        </label>
+
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            class="form-control"
+                            placeholder="e.g. London, UK"
+                            value="{{ employer_profile.location or '' if employer_profile else '' }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- COMPANY DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Company Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        class="form-control"
+                        placeholder="Describe your company, its activities and its working environment..."
+                    >{{ employer_profile.description or '' if employer_profile else '' }}</textarea>
+
+                </div>
+
+
+                <!-- FORM ACTIONS -->
+
+                <div class="form-actions">
+
+                    <a
+                        href="{{ url_for('employer.dashboard') }}"
+                        class="button cancel-button"
+                    >
+                        Back to Dashboard
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="button save-button"
+                    >
+                        Save Company Profile
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

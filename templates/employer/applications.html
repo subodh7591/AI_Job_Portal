@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Applications - {{ job.title }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #263238;
+        }
+
+        .navbar {
+            background: #1f2937;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            font-size: 21px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1150px;
+            margin: 35px auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .back-button {
+            background: #e2e8f0;
+            color: #334155;
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .job-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 9px;
+            margin-bottom: 25px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .job-summary h3 {
+            margin-bottom: 10px;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .applications-card {
+            background: white;
+            border-radius: 9px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+        }
+
+        .count {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .application-list {
+            padding: 20px;
+        }
+
+        .application-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .application-item:last-child {
+            border-bottom: none;
+        }
+
+        .applicant-info h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .applicant-info p {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .application-date {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 9px;
+        }
+
+        .application-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .status-submitted {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-under_review {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-shortlisted {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .status-interview {
+            background: #cffafe;
+            color: #155e75;
+        }
+
+        .status-accepted {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .view-button {
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .view-button:hover {
+            background: #1d4ed8;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 55px 20px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 14px;
+        }
+
+        @media (max-width: 650px) {
+            .page-header,
+            .application-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .application-actions {
+                width: 100%;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .navbar a {
+                margin: 0 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h2>Smart Job Portal</h2>
+
+        <div>
+            <a href="{{ url_for('employer.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('employer.manage_jobs') }}">Manage Jobs</a>
+            <a href="{{ url_for('authentication.logout') }}">Logout</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <div class="page-header">
+            <div>
+                <h1>Job Applications</h1>
+                <p>Review candidates who applied for this vacancy.</p>
+            </div>
+
+            <a href="{{ url_for('employer.manage_jobs') }}"
+               class="back-button">
+                Back to Manage Jobs
+            </a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <section class="job-summary">
+            <h3>{{ job.title }}</h3>
+
+            <div class="job-meta">
+                <span>{{ job.location or 'Location not specified' }}</span>
+                <span>{{ job.employment_type or 'Employment type not specified' }}</span>
+                <span>{{ job.workplace_type or 'Workplace type not specified' }}</span>
+                <span>Posted:
+                    {{ job.created_at.strftime('%d %b %Y') if job.created_at else 'Not available' }}
+                </span>
+            </div>
+        </section>
+
+        <section class="applications-card">
+
+            <div class="card-header">
+                <h2>Applicants for this vacancy</h2>
+
+                <span class="count">
+                    {{ applications|length }} Applicants
+                </span>
+            </div>
+
+            {% if applications %}
+
+                <div class="application-list">
+
+                    {% for application in applications %}
+
+                        <div class="application-item">
+
+                            <div class="applicant-info">
+
+                                <h3>
+                                    {{ application.job_seeker.first_name }}
+                                    {{ application.job_seeker.last_name }}
+                                </h3>
+
+                                <p>
+                                    {{ application.job_seeker.email }}
+                                </p>
+
+                                {% if application.job_seeker.job_seeker_profile %}
+                                    <p>
+                                        {{ application.job_seeker.job_seeker_profile.location or 'Location not provided' }}
+                                    </p>
+                                {% endif %}
+
+                                <p class="application-date">
+                                    Applied:
+                                    {{ application.applied_at.strftime('%d %b %Y') if application.applied_at else 'Date not available' }}
+                                </p>
+
+                            </div>
+
+                            <div class="application-actions">
+
+                                <span class="status status-{{ application.status }}">
+                                    {{ application.status.replace('_', ' ') }}
+                                </span>
+
+                                <a href="{{ url_for(
+                                    'employer.application_details',
+                                    application_id=application.id
+                                ) }}"
+                                   class="view-button">
+                                    View Application
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+                    <h3>No applications received yet</h3>
+                    <p>
+                        Applications submitted for this vacancy
+                        will appear here.
+                    </p>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</body>
+</html>

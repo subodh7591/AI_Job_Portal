@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | AI Job Portal</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 520px;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            background: #ffffff;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .name-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .name-row .form-group {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .register-button {
+            width: 100%;
+            padding: 13px;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .register-button:hover {
+            background: #1d4ed8;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .login-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .flash-message {
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .flash-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .flash-message.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .flash-message.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        .form-note {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 480px) {
+
+            .register-container {
+                padding: 25px 20px;
+            }
+
+            .name-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="register-container">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <h1>Create Your Account</h1>
+
+            <p>
+                Join AI Job Portal and take the next step in your career.
+            </p>
+
+        </div>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- REGISTRATION FORM -->
+
+        <form
+            method="POST"
+            action="{{ url_for('authentication.register') }}"
+        >
+
+            <!-- ACCOUNT TYPE -->
+
+            <div class="form-group">
+
+                <label for="role">
+                    Register As
+                </label>
+
+                <select
+                    id="role"
+                    name="role"
+                    class="form-control"
+                    required
+                >
+
+                    <option value="job_seeker">
+                        Job Seeker
+                    </option>
+
+                    <option value="employer">
+                        Employer
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- COMPANY NAME -->
+
+            <div
+                class="form-group"
+                id="company-field"
+                style="display: none;"
+            >
+
+                <label for="company_name">
+                    Company Name
+                </label>
+
+                <input
+                    type="text"
+                    id="company_name"
+                    name="company_name"
+                    class="form-control"
+                    placeholder="Enter your company name"
+                >
+
+            </div>
+
+
+            <!-- FIRST NAME AND LAST NAME -->
+
+            <div class="name-row">
+
+                <div class="form-group">
+
+                    <label for="first_name">
+                        First Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        class="form-control"
+                        placeholder="First name"
+                        autocomplete="given-name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="last_name">
+                        Last Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        class="form-control"
+                        placeholder="Last name"
+                        autocomplete="family-name"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-control"
+                    placeholder="Choose a username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Create a password"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <p class="form-note">
+                    Password must contain at least 8 characters.
+                </p>
+
+            </div>
+
+
+            <!-- SUBMIT BUTTON -->
+
+            <button
+                type="submit"
+                class="register-button"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+
+        <!-- LOGIN LINK -->
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="{{ url_for('authentication.login') }}">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACCOUNT TYPE TOGGLE -->
+
+    <script>
+
+        const roleField = document.getElementById("role");
+
+        const companyField = document.getElementById(
+            "company-field"
+        );
+
+        const companyInput = document.getElementById(
+            "company_name"
+        );
+
+
+        function updateRegistrationFields() {
+
+            if (roleField.value === "employer") {
+
+                companyField.style.display = "block";
+
+                companyInput.required = true;
+
+            } else {
+
+                companyField.style.display = "none";
+
+                companyInput.required = false;
+
+                companyInput.value = "";
+
+            }
+
+        }
+
+
+        roleField.addEventListener(
+            "change",
+            updateRegistrationFields
+        );
+
+
+        updateRegistrationFields();
+
+    </script>
+
+</body>
+
+</html>

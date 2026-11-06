@@ -1,0 +1,1059 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Skill Gap Analysis | Smart Job Portal</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background-color: #f5f7fb;
+            color: #212529;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .page-header {
+            margin-top: 35px;
+            margin-bottom: 25px;
+        }
+
+        .main-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .summary-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 22px;
+            height: 100%;
+        }
+
+        .summary-label {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .summary-number {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .progress {
+            height: 11px;
+            border-radius: 20px;
+            background-color: #e9ecef;
+        }
+
+        .progress-bar {
+            border-radius: 20px;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            padding: 8px 13px;
+            margin: 5px 5px 5px 0;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .matched-skill {
+            color: #146c43;
+            background-color: #d1e7dd;
+        }
+
+        .missing-skill {
+            color: #842029;
+            background-color: #f8d7da;
+        }
+
+        .preferred-skill {
+            color: #664d03;
+            background-color: #fff3cd;
+        }
+
+        .empty-message {
+            color: #6c757d;
+            font-size: 14px;
+            padding: 12px 0;
+        }
+
+        .section-title {
+            font-size: 19px;
+            font-weight: 650;
+            margin-bottom: 8px;
+        }
+
+        .section-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .recommendation-note {
+            background-color: #eef4ff;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        /* Learning resource styles */
+
+        .learning-section {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .learning-skill-group {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            background-color: #ffffff;
+        }
+
+        .learning-skill-title {
+            font-size: 17px;
+            font-weight: 650;
+            margin-bottom: 15px;
+        }
+
+        .learning-resource {
+            background-color: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 17px;
+            height: 100%;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .learning-resource:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .resource-provider {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .resource-title {
+            font-size: 16px;
+            font-weight: 650;
+            margin-bottom: 8px;
+        }
+
+        .resource-description {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.6;
+            min-height: 42px;
+        }
+
+        .resource-type {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background-color: #e0e7ff;
+            color: #3730a3;
+            display: inline-block;
+        }
+
+        .resource-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: #2563eb;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .resource-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .priority-label {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 9px;
+            border-radius: 20px;
+        }
+
+        .required-priority {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .preferred-priority {
+            background-color: #fff3cd;
+            color: #664d03;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        .footer {
+            color: #6b7280;
+            font-size: 13px;
+            padding: 25px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 576px) {
+
+            .main-card,
+            .learning-section {
+                padding: 18px;
+            }
+
+            .summary-number {
+                font-size: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ===================================================== -->
+<!-- NAVIGATION -->
+<!-- ===================================================== -->
+
+<nav class="navbar navbar-expand-lg">
+
+    <div class="container">
+
+        <a
+            class="navbar-brand"
+            href="{{ url_for('job_seeker.jobs') }}"
+        >
+            Smart Job Portal
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMenu"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarMenu"
+        >
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('job_seeker.profile') }}"
+                    >
+                        My Profile
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('job_seeker.jobs') }}"
+                    >
+                        Browse Jobs
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('job_seeker.recommended_jobs') }}"
+                    >
+                        Recommended Jobs
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('job_seeker.my_applications') }}"
+                    >
+                        My Applications
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- ===================================================== -->
+<!-- MAIN CONTENT -->
+<!-- ===================================================== -->
+
+<div class="container pb-5">
+
+    <!-- Page Header -->
+
+    <div class="page-header">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+            <div>
+
+                <h2 class="fw-bold mb-2">
+                    Skill Gap Analysis
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Understand how your existing skills align
+                    with the requirements of this job.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('job_seeker.job_details', job_id=job.id) }}"
+                class="btn btn-outline-secondary"
+            >
+                Back to Job Details
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Flash Messages -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- ================================================= -->
+    <!-- JOB INFORMATION -->
+    <!-- ================================================= -->
+
+    <div class="main-card">
+
+        <div class="d-flex flex-wrap justify-content-between gap-3">
+
+            <div>
+
+                <h4 class="fw-bold mb-2">
+                    {{ job.title }}
+                </h4>
+
+                <div class="text-muted small">
+
+                    {% if job.location %}
+                        <span class="me-3">
+                            {{ job.location }}
+                        </span>
+                    {% endif %}
+
+                    {% if job.employment_type %}
+                        <span class="me-3">
+                            {{ job.employment_type }}
+                        </span>
+                    {% endif %}
+
+                    {% if job.workplace_type %}
+                        <span>
+                            {{ job.workplace_type }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <div>
+                <span class="badge bg-primary">
+                    Skill Gap Report
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- REQUIRED SKILL SUMMARY -->
+    <!-- ================================================= -->
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    Required Skill Coverage
+                </div>
+
+                <div class="summary-number text-primary">
+
+                    {% if skill_gap_report.required_skill_score is not none %}
+                        {{ skill_gap_report.required_skill_score }}%
+                    {% else %}
+                        N/A
+                    {% endif %}
+
+                </div>
+
+                <div class="text-muted small">
+                    {{ skill_gap_report.matched_required_count }}
+                    of
+                    {{ skill_gap_report.total_required_skills }}
+                    required skills matched
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    Matched Required Skills
+                </div>
+
+                <div class="summary-number text-success">
+                    {{ skill_gap_report.matched_required_count }}
+                </div>
+
+                <div class="text-muted small">
+                    Skills identified in your resume
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="summary-card">
+
+                <div class="summary-label">
+                    Missing Required Skills
+                </div>
+
+                <div class="summary-number text-danger">
+                    {{ skill_gap_report.missing_required_count }}
+                </div>
+
+                <div class="text-muted small">
+                    Skills not identified in your resume
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- REQUIRED SKILL COVERAGE -->
+    <!-- ================================================= -->
+
+    <div class="main-card">
+
+        <h5 class="section-title">
+            Required Skill Coverage
+        </h5>
+
+        <p class="section-description">
+            This percentage represents the proportion of
+            required job skills identified in your resume.
+        </p>
+
+        {% if skill_gap_report.required_skill_score is not none %}
+
+            <div class="d-flex justify-content-between mb-2">
+
+                <span class="fw-semibold">
+                    Required skill match
+                </span>
+
+                <span class="fw-bold text-primary">
+                    {{ skill_gap_report.required_skill_score }}%
+                </span>
+
+            </div>
+
+            <div class="progress mb-3">
+
+                <div
+                    class="progress-bar bg-primary"
+                    role="progressbar"
+                    style="width: {{ skill_gap_report.required_skill_score }}%;"
+                    aria-valuenow="{{ skill_gap_report.required_skill_score }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                ></div>
+
+            </div>
+
+        {% else %}
+
+            <div class="alert alert-info mb-0">
+                No required skills have been specified for this job.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- MATCHED REQUIRED SKILLS -->
+    <!-- ================================================= -->
+
+    <div class="main-card">
+
+        <h5 class="section-title text-success">
+            Matched Required Skills
+        </h5>
+
+        <p class="section-description">
+            These required skills were identified in your
+            stored resume information.
+        </p>
+
+        {% if skill_gap_report.matched_required_skills %}
+
+            <div>
+
+                {% for skill in skill_gap_report.matched_required_skills %}
+
+                    <span class="skill-tag matched-skill">
+                        &#10003; {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p class="empty-message mb-0">
+                No required skills were matched.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- MISSING REQUIRED SKILLS -->
+    <!-- ================================================= -->
+
+    <div class="main-card">
+
+        <h5 class="section-title text-danger">
+            Missing Required Skills
+        </h5>
+
+        <p class="section-description">
+            These required skills were not identified in
+            your resume. Consider developing or documenting
+            these competencies where applicable.
+        </p>
+
+        {% if skill_gap_report.missing_required_skills %}
+
+            <div>
+
+                {% for skill in skill_gap_report.missing_required_skills %}
+
+                    <span class="skill-tag missing-skill">
+                        + {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="alert alert-success mb-0">
+                All specified required skills were identified
+                in your resume.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- PREFERRED SKILLS -->
+    <!-- ================================================= -->
+
+    <div class="main-card">
+
+        <h5 class="section-title">
+            Preferred Skills Analysis
+        </h5>
+
+        <p class="section-description">
+            Preferred skills are additional competencies that
+            may strengthen your suitability for the position.
+        </p>
+
+        {% if skill_gap_report.preferred_skill_score is not none %}
+
+            <div class="mb-4">
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="fw-semibold">
+                        Preferred skill coverage
+                    </span>
+
+                    <span class="fw-bold text-warning">
+                        {{ skill_gap_report.preferred_skill_score }}%
+                    </span>
+
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar bg-warning"
+                        role="progressbar"
+                        style="width: {{ skill_gap_report.preferred_skill_score }}%;"
+                        aria-valuenow="{{ skill_gap_report.preferred_skill_score }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <div class="alert alert-info">
+                No preferred skills have been specified for this job.
+            </div>
+
+        {% endif %}
+
+
+        <h6 class="fw-semibold text-success mt-3">
+            Matched Preferred Skills
+        </h6>
+
+        {% if skill_gap_report.matched_preferred_skills %}
+
+            {% for skill in skill_gap_report.matched_preferred_skills %}
+
+                <span class="skill-tag matched-skill">
+                    &#10003; {{ skill }}
+                </span>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty-message">
+                No preferred skills were matched.
+            </p>
+
+        {% endif %}
+
+
+        <hr class="my-4">
+
+
+        <h6 class="fw-semibold text-warning">
+            Missing Preferred Skills
+        </h6>
+
+        {% if skill_gap_report.missing_preferred_skills %}
+
+            {% for skill in skill_gap_report.missing_preferred_skills %}
+
+                <span class="skill-tag preferred-skill">
+                    + {{ skill }}
+                </span>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty-message">
+                No missing preferred skills identified.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- SKILL DEVELOPMENT PRIORITIES -->
+    <!-- ================================================= -->
+
+    <div class="main-card">
+
+        <h5 class="section-title">
+            Skill Development Priorities
+        </h5>
+
+        <p class="section-description">
+            These are the areas you could focus on to improve
+            your alignment with the selected job.
+        </p>
+
+        {% if skill_gap_report.missing_required_skills or skill_gap_report.missing_preferred_skills %}
+
+            <div class="recommendation-note">
+
+                {% if skill_gap_report.missing_required_skills %}
+
+                    <div class="mb-3">
+
+                        <span class="priority-label required-priority">
+                            Priority 1: Required Skills
+                        </span>
+
+                        <ul class="mt-3 mb-0">
+
+                            {% for skill in skill_gap_report.missing_required_skills %}
+
+                                <li class="mb-1">
+                                    {{ skill }}
+                                </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if skill_gap_report.missing_preferred_skills %}
+
+                    <div>
+
+                        <span class="priority-label preferred-priority">
+                            Priority 2: Preferred Skills
+                        </span>
+
+                        <ul class="mt-3 mb-0">
+
+                            {% for skill in skill_gap_report.missing_preferred_skills %}
+
+                                <li class="mb-1">
+                                    {{ skill }}
+                                </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        {% else %}
+
+            <div class="alert alert-success mb-0">
+                Your resume contains all the required and preferred
+                skills specified for this job.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- RECOMMENDED LEARNING RESOURCES -->
+    <!-- ================================================= -->
+
+    <div class="learning-section">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+
+            <div>
+
+                <h5 class="section-title">
+                    Recommended Learning Resources
+                </h5>
+
+                <p class="section-description mb-0">
+                    Explore courses, tutorials and documentation
+                    to help develop the skills identified in your
+                    skill-gap analysis.
+                </p>
+
+            </div>
+
+            <span class="badge bg-primary">
+                Learning Recommendations
+            </span>
+
+        </div>
+
+
+        {% if learning_recommendations %}
+
+            {% for recommendation in learning_recommendations %}
+
+                <div class="learning-skill-group">
+
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+
+                        <h6 class="learning-skill-title mb-0">
+                            {{ recommendation.skill }}
+                        </h6>
+
+                        {% if recommendation.skill in skill_gap_report.missing_required_skills %}
+
+                            <span class="priority-label required-priority">
+                                Required Skill
+                            </span>
+
+                        {% else %}
+
+                            <span class="priority-label preferred-priority">
+                                Preferred Skill
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+                        {% for resource in recommendation.resources %}
+
+                            <div class="col-md-6">
+
+                                <div class="learning-resource">
+
+                                    <span class="resource-type">
+                                        {{ resource.type }}
+                                    </span>
+
+                                    <h6 class="resource-title mt-3">
+                                        {{ resource.title }}
+                                    </h6>
+
+                                    <p class="resource-provider">
+                                        Provider: {{ resource.provider }}
+                                    </p>
+
+                                    <p class="resource-description">
+                                        {{ resource.description }}
+                                    </p>
+
+                                    <a
+                                        href="{{ resource.url }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="resource-link"
+                                    >
+                                        Explore Resource
+                                        &rarr;
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="alert alert-success mb-0">
+
+                <h6 class="fw-bold">
+                    No learning recommendations required
+                </h6>
+
+                <p class="mb-0 small">
+                    No missing required or preferred skills were
+                    identified. Your resume currently covers all
+                    the specified skills for this job.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+        <p class="text-muted small mb-0 mt-3">
+            Learning resources are provided as development
+            suggestions. Review the course content and provider
+            information before selecting a learning activity.
+        </p>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- IMPORTANT NOTE -->
+    <!-- ================================================= -->
+
+    <div class="alert alert-secondary">
+
+        <strong>Important:</strong>
+
+        This report is based on the skills and information
+        extracted from your uploaded resume and the requirements
+        specified in the job listing.
+
+        A missing skill means that it was not identified in
+        the available resume information. It does not necessarily
+        mean that you do not possess that skill.
+
+        The coverage percentages are indicative skill-matching
+        measurements, not probabilities of being hired or
+        guarantees of job suitability.
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- ACTION BUTTONS -->
+    <!-- ================================================= -->
+
+    <div class="d-flex flex-wrap gap-2 justify-content-between mt-4">
+
+        <a
+            href="{{ url_for('job_seeker.job_details', job_id=job.id) }}"
+            class="btn btn-outline-secondary"
+        >
+            Back to Job Details
+        </a>
+
+        <div class="d-flex flex-wrap gap-2">
+
+            <a
+                href="{{ url_for('job_seeker.recommended_jobs') }}"
+                class="btn btn-outline-primary"
+            >
+                Recommended Jobs
+            </a>
+
+            <a
+                href="{{ url_for('job_seeker.profile') }}"
+                class="btn btn-primary"
+            >
+                Update My Profile
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- FOOTER -->
+<!-- ===================================================== -->
+
+<footer class="footer">
+
+    <div class="container">
+        Smart Job Portal &copy; {{ now.year if now is defined else '' }}
+    </div>
+
+</footer>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+</body>
+</html>
